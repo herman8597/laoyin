@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-ch" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发货单</title>
+  <style>
+    .app-container {
+      width: 269px;
+      border: 1px solid #000;
+      border-bottom: none;
+    }
+
+    .header {
+      text-align: center;
+    }
+
+    .header-img {
+      width: 150px;
+    }
+
+    .sub-header-text {
+      font-size: 12px;
+    }
+
+    .info {
+      font-size: 12px;
+      padding-left: 5px;
+      border-bottom: 1px solid #000;
+      height: 148px;
+    }
+
+    .body {
+      font-size: 12px;
+      border-bottom: 1px solid #000;
+      padding: 0px 5px;
+      padding-bottom: 10px;
+    }
+
+    .table {
+      text-align: center;
+      border-collapse: collapse;
+      width: 260px;
+    }
+
+    table,
+    tr,
+    td,
+    th {
+      /* padding: 0; */
+      border: 1px solid #000;
+    }
+
+    th {
+      height: 32px;
+      background-color: #eee;
+    }
+
+    td {
+      /* white-space:nowrap; */
+      font-size: 12px;
+      transform: scale(0.8);
+    }
+
+    .single {
+      width: 17px;
+    }
+
+    .td-div {
+      height: 40px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app-container">
+  <div class="header">
+    <div th:text="'发货单:'+${code}">发货单:F20211009173257080</div>
+    <img class="header-img"
+         th:src="@{${barImgPath}}"
+         alt="">
+    <div class="sub-header-text">扫码打印运单</div>
+  </div>
+  <div class="info">
+    <div th:text="'发货单号：'+${code}">发货单号：F149223</div>
+    <div th:text="'配送方式：'+${distributionModeName}">配送方式：中通快递</div>
+    <div th:text="'收货人：'+${consignee}">收货人：韩华昌</div>
+    <div th:text="'手机号：'+${mobile}">手机号：18823403866</div>
+    <div th:text="'收货地址：'+${countryName}+${provinceName}+${cityName}+${areaName}+${detailedAddress}">收货地址：广东省深圳市南山区西丽街道众冠时代广场16楼</div>
+    <div th:text="'产品数量合计：'+${productSum}">产品数量合计：200</div>
+  </div>
+  <div th:each="item : ${dispatchListItems}" class="body">
+    <div th:text="'订单号：'+${item.orderNo}">订单号：21070415703885</div>
+    <div th:text="'第三方单号：'+${item.thirdPartyNo}">第三方单号：152372</div>
+    <table cellpadding="0" cellspacing="0" class="table">
+      <tr>
+        <th>配货码</th>
+        <th>商品名称</th>
+        <th>SKU编码</th>
+        <th>规格</th>
+        <th class="single">单位</th>
+        <th class="single">数量</th>
+      </tr>
+      <tr th:each="itemItem : ${item.dispatchListItemItems}">
+        <td>
+          <div class="td-div" th:text="${itemItem.distributionCode}">H182981</div>
+        </td>
+        <td>
+          <div class="td-div" th:text="${itemItem.goodsName}">
+            亮透彩印软壳(TPU)
+          </div>
+        </td>
+        <td>
+          <div class="td-div" th:text="${itemItem.sku}">
+            P000568E
+          </div>
+        </td>
+        <td>
+          <div class="td-div" th:text="${itemItem.productSpecName}">
+            huawei mate30
+          </div>
+        </td>
+        <td>
+          <div class="td-div" th:text="${itemItem.unitName}">
+            个
+          </div>
+        </td>
+        <td>
+          <div class="td-div" th:text="${itemItem.itemCount}">
+            50
+          </div>
+        </td>
+      </tr>
+  </div>
+</div>
+</body>
+
+</html>

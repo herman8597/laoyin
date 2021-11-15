@@ -1,0 +1,100 @@
+package ${package.Controller};
+
+#if(${enableSwagger})
+import io.swagger.annotations.Api;
+#end
+import ${package.Service}.${table.serviceName};
+import com.bat.laoyin.web.base.Response;
+import org.springframework.web.bind.annotation.*;
+import ${package.Entity}.${entity};
+import javax.annotation.Resource;
+#if(${swagger2})
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+#end
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PathVariable;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${package.Qry}.${entityQry};
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+/**
+ * <p>
+ * ${table.comment}  前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${swagger2})
+@Api(tags = "${table.comment}" ,value="${table.controllerName}")
+#end
+@RestController
+@RequestMapping("/v1#if(${package.ModuleName})/${package.ModuleName}#end/${oldEntity.toLowerCase()}s")
+public class ${table.controllerName} {
+
+    @Resource
+    private ${table.serviceName} service;
+
+    @GetMapping()
+    #if(${swagger2})
+    @ApiOperation(value="获取 ${table.comment} 列表数据 所有资源(分页)", notes="")
+    #end
+    public Response<IPage<${entity}>> listAll(${entityQry} qry){
+        IPage<${entity}> page = new Page<>(qry.getPage(), qry.getSize());
+        return Response.of(service.selectPageVo(page,qry));
+    }
+
+    @GetMapping("/{id}")
+    #if(${swagger2})
+    @ApiOperation(value="根据主键(id|id;id;id) 获取 ${table.comment} 单个或多个资源", notes="")
+    #end
+    public Response<List<${entity}>> getById(@PathVariable String id){
+        List<Integer> ids = Arrays.stream(id.split(";")).map(Integer::valueOf).collect(Collectors.toList());
+        return Response.of(service.listByIds(ids));
+    }
+
+    @PostMapping()
+    #if(${swagger2})
+    @ApiOperation(value="新增 ${table.comment} 单个资源", notes="")
+    #end
+    public Response<${entity}> create(@RequestBody ${entity} aDo){
+        service.save(aDo);
+        return Response.of(aDo);
+    }
+
+    @PutMapping("/{id}")
+    #if(${swagger2})
+    @ApiOperation(value="根据主键全量更新 ${table.comment} 单个资源", notes="")
+    #end
+    public Response<${entity}> updatePutById(@PathVariable Integer id,@RequestBody ${entity} newObj){
+        newObj.setId(id);
+        service.updateById(newObj);
+        return Response.of(newObj);
+    }
+
+    @PatchMapping("/{id}")
+    #if(${swagger2})
+    @ApiOperation(value="根据主键增量更新 ${table.comment} 单个资源", notes="")
+    #end
+    public Response<${entity}> updatePatchById(@PathVariable Integer id,@RequestBody ${entity} newObj){
+        newObj.setId(id);
+        ${entity} oldObj = service.getById(id);
+        BeanUtil.copyProperties(newObj,oldObj, CopyOptions.create().setIgnoreNullValue(true));
+        service.updateById(oldObj);
+        return Response.of(oldObj);
+    }
+
+    @DeleteMapping("/{id}")
+    #if(${swagger2})
+    @ApiOperation(value="根据主键(id|id;id;id)删除 ${table.comment} 单个或多个资源", notes="")
+    #end
+    public Response deleteById(@PathVariable String id){
+        List<Integer> ids = Arrays.stream(id.split(";")).map(Integer::valueOf).collect(Collectors.toList());
+        return Response.of(service.removeByIds(ids));
+    }
+
+}

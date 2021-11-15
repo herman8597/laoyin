@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+</head>
+
+<body>
+<iframe height="1000px" id="pdf" th:src="@{${fileSrc}}" width="100%"></iframe>
+</body>
+<script>
+  window.onload = function () {
+    document.getElementById("pdf").contentWindow.print();
+  }
+
+</script>
+
+</html>

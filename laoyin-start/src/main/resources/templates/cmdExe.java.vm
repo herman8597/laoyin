@@ -1,0 +1,15 @@
+package ${package.CmdExe};
+
+import com.baomidou.mybatisplus.extension.rq.service.impl.ServiceCmdImpl;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Entity}.${entity};
+import org.springframework.stereotype.Component;
+
+/**
+ * @author: lim
+ * @description: TODO
+ * @date: 2021/8/4 23:29
+ */
+@Component
+public class ${entityCmdExe} extends ServiceCmdImpl<${table.mapperName}, ${entity}> {
+}

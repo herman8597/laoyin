@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.order.OrderInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.order.dataobject.OrderInfoDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="third_party_no" property="thirdPartyNo"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="order_type" property="orderType"/>
+        <result column="checked_by" property="checkedBy"/>
+        <result column="buyer" property="buyer"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, created_by, updated_by, created_at, updated_at,tenant_id, delete_flag, status, order_no, third_party_no, customer_id, customer_name, order_type, checked_by, buyer, remark
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_info
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and `status` = #{do.status}
+            </if>
+            <if test="do.checkStatus!=null">
+                <if test="do.checkStatus==1">
+                    and `status` in (1,2)
+                </if>
+                <if test="do.checkStatus==2">
+                    and `status` in (3,4,5,6,7,8)
+                </if>
+            </if>
+            <if test="do.orderNo!=null">
+                and order_no = #{do.orderNo}
+            </if>
+            <if test="do.thirdPartyNo!=null">
+                and third_party_no = #{do.thirdPartyNo}
+            </if>
+            <if test="do.customerId!=null">
+                and customer_id = #{do.customerId}
+            </if>
+            <if test="do.customerName!=null">
+                and customer_name = #{do.customerName}
+            </if>
+            <if test="do.orderType!=null">
+                and order_type = #{do.orderType}
+            </if>
+            <if test="do.checkedBy!=null">
+                and checked_by = #{do.checkedBy}
+            </if>
+            <if test="do.buyer!=null">
+                and buyer = #{do.buyer}
+            </if>
+            <if test="do.remark!=null">
+                and remark = #{do.remark}
+            </if>
+            <if test="params.createdStartTime!=null">
+                and created_at &gt; #{params.createdStartTime}
+            </if>
+            <if test="params.createdEndTime!=null">
+                and created_at &lt; #{params.createdStartTime}
+            </if>
+            and delete_flag = 0
+        </where>
+        order by ${sort}
+    </select>
+</mapper>

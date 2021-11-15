@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.sendgoods.SendGoodsDistributionModeMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.sendgoods.dataobject.SendGoodsDistributionModeDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="logistics_name" property="logisticsName"/>
+        <result column="logistics_code" property="logisticsCode"/>
+        <result column="distribution_type_name" property="distributionTypeName"/>
+        <result column="distribution_type_code" property="distributionTypeCode"/>
+        <result column="address_id" property="addressId"/>
+        <result column="address_name" property="addressName"/>
+        <result column="platform_code" property="platformCode"/>
+        <result column="province_ids" property="provinceIds"/>
+        <result column="city_ids" property="cityIds"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="customer_pwd" property="customerPwd"/>
+        <result column="month_code" property="monthCode"/>
+        <result column="send_site" property="sendSite"/>
+        <result column="send_staff" property="sendStaff"/>
+        <result column="pay_type" property="payType"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, created_by, updated_by, created_at, updated_at,tenant_id, delete_flag, status, logistics_name, logistics_code, distribution_type_code, distribution_type_name, address_id, address_name, platform_code, province_ids, city_ids, customer_name, customer_pwd, month_code, send_site, send_staff, pay_type
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from send_goods_distribution_mode
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and status = #{do.status}
+            </if>
+            <if test="do.logisticsName!=null">
+                and logistics_name = #{do.logisticsName}
+            </if>
+            <if test="do.logisticsCode!=null">
+                and logistics_code = #{do.logisticsCode}
+            </if>
+            <if test="do.distributionTypeName!=null">
+                and distribution_type_name = #{do.distributionTypeName}
+            </if>
+            <if test="do.distributionTypeCode!=null">
+                and distribution_type_code = #{do.distributionTypeCode}
+            </if>
+            <if test="do.addressId!=null">
+                and address_id = #{do.addressId}
+            </if>
+            <if test="do.addressName!=null">
+                and address_name = #{do.addressName}
+            </if>
+            <if test="do.platformCode!=null">
+                and FIND_IN_SET(#{do.platformCode},platform_code)
+            </if>
+            <if test="do.provinceIds!=null">
+                and province_ids = #{do.provinceIds}
+            </if>
+            <if test="do.cityIds!=null">
+                and city_ids = #{do.cityIds}
+            </if>
+            and delete_flag = 0
+        </where>
+        order by ${sort}
+    </select>
+</mapper>

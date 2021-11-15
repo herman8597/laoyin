@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.region.RegionMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.region.dataobject.RegionDO">
+        <id column="id" property="id"/>
+        <result column="region_name" property="regionName"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="have_next" property="haveNext"/>
+        <result column="region_name_en" property="regionNameEn"/>
+        <result column="level" property="level"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,region_name, parent_id, have_next, region_name_en, level
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from region
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.regionName!=null">
+                and region_name = #{do.regionName}
+            </if>
+            <if test="do.parentId!=null">
+                and parent_id = #{do.parentId}
+            </if>
+            <if test="do.haveNext!=null">
+                and have_next = #{do.haveNext}
+            </if>
+            <if test="do.regionNameEn!=null">
+                and region_name_en = #{do.regionNameEn}
+            </if>
+            <if test="do.level!=null">
+                and level = #{do.level}
+            </if>
+        </where>
+        order by ${sort}
+    </select>
+</mapper>

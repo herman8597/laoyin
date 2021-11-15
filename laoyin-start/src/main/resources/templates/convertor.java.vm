@@ -1,0 +1,72 @@
+package ${package.Convertor};
+
+import ${package.Dto}.${entityDTO};
+import ${package.Entity}.${entity};
+import ${package.Qry}.${entityQry};
+import com.bat.laoyin.service.common.constants.Constant;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+/**
+ * @author: lim
+ * @description: TODO
+ * @date: 2021/8/6 20:25
+ */
+public class ${entityConvertor} {
+
+    /**
+     * CMD 转 DO
+     * @param cmd
+     * @param operationType
+     * @return
+     */
+    public static ${entity} to${entity}(Object cmd, Short operationType) {
+        ${entity} aDo = new ${entity}();
+        BeanUtils.copyProperties(cmd, aDo);
+        if (operationType.equals(Constant.OPERATION_TYPE_CREATE)) {
+            aDo.setId(null);
+        }
+        Date date = new Date();
+        aDo.setCreatedAt(date);
+        aDo.setUpdatedAt(date);
+        return aDo;
+    }
+
+    public static ${entity} to${entity}(${entityQry} qry) {
+        ${entity} aDo = new ${entity}();
+        BeanUtils.copyProperties(qry, aDo);
+        return aDo;
+    }
+
+    /**
+     * do列表转dto列表
+     *
+     * @param dos
+     * @return
+     */
+    public static List<${entityDTO}> to${entityDTO}List(List<${entity}> dos) {
+        if(!CollectionUtils.isEmpty(dos)){
+            return dos.stream().map(${entityConvertor}::to${entityDTO}).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * do转dto
+     *
+     * @param aDo
+     * @return
+     */
+    public static ${entityDTO} to${entityDTO}(${entity} aDo) {
+        if(aDo!=null){
+            ${entityDTO} dto = new ${entityDTO}();
+                BeanUtils.copyProperties(aDo, dto);
+                return dto;
+            }
+            return null;
+        }
+    }

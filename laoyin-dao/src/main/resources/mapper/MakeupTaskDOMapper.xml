@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.makeup.MakeupTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.makeup.dataobject.MakeupTaskDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="deadline_status" property="deadlineStatus"/>
+        <result column="code" property="code"/>
+        <result column="makeup_setting_id" property="makeupSettingId"/>
+        <result column="makeup_setting_name" property="makeupSettingName"/>
+        <result column="makeup_setting_file_path" property="makeupSettingFilePath"/>
+        <result column="product_count" property="productCount"/>
+        <result column="deadline_time" property="deadlineTime"/>
+        <result column="file_path" property="filePath"/>
+        <result column="max_count" property="maxCount"/>
+        <result column="delay_time" property="delayTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, created_by, updated_by, created_at, updated_at,tenant_id, delete_flag, status, deadline_status, code, makeup_setting_id, makeup_setting_name, makeup_setting_file_path, product_count, deadline_time, file_path, max_count, delay_time, remark
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from makeup_task
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and status = #{do.status}
+            </if>
+            <if test="do.deadlineStatus!=null">
+                and deadline_status = #{do.deadlineStatus}
+            </if>
+            <if test="do.code!=null">
+                and code = #{do.code}
+            </if>
+            <if test="do.makeupSettingId!=null">
+                and makeup_setting_id = #{do.makeupSettingId}
+            </if>
+            <if test="do.makeupSettingName!=null">
+                and makeup_setting_name = #{do.makeupSettingName}
+            </if>
+            <if test="do.makeupSettingFilePath!=null">
+                and makeup_setting_file_path = #{do.makeupSettingFilePath}
+            </if>
+            <if test="do.productCount!=null">
+                and product_count = #{do.productCount}
+            </if>
+            <if test="do.deadlineTime!=null">
+                and deadline_time = #{do.deadlineTime}
+            </if>
+            <if test="do.filePath!=null">
+                and file_path = #{do.filePath}
+            </if>
+            <if test="do.maxCount!=null">
+                and max_count = #{do.maxCount}
+            </if>
+            <if test="do.delayTime!=null">
+                and delay_time = #{do.delayTime}
+            </if>
+            <if test="do.remark!=null">
+                and remark = #{do.remark}
+            </if>
+            <if test="params.makeupStartTime!=null or params.makeupEndTime!=null">
+                and `status` in (2,3)
+                <if test="params.makeupEndTime!=null">
+                    and updated_at &gt; #{params.makeupStartTime}
+                </if>
+                <if test="params.makeupEndTime!=null">
+                    and updated_at &lt; #{params.makeupStartTime}
+                </if>
+            </if>
+            and delete_flag = 0
+        </where>
+        order by ${sort}
+    </select>
+    <select id="getByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from makeup_task
+        where code = #{makeupTaskCode}
+    </select>
+</mapper>

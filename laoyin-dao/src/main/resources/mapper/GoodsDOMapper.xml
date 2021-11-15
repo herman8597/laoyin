@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.goods.GoodsMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.goods.dataobject.GoodsDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="product_code" property="productCode"/>
+        <result column="sku" property="sku"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="spec" property="spec"/>
+        <result column="unit_name" property="unitName"/>
+        <result column="platform_code" property="platformCode"/>
+        <result column="distribution_mode_id" property="distributionModeId"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        goods.id, goods.created_by, goods.updated_by, goods.created_at, goods.updated_at,goods.tenant_id, goods.delete_flag, goods.status, goods.customer_id, goods.product_code, goods.sku, goods.name, goods.code, goods.spec, goods.unit_name, goods.platform_code, goods.distribution_mode_id, goods.remark
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,customer.name customer_name
+        from goods left join customer on goods.customer_id = customer.id
+        <where>
+            and (goods.product_code is not null or goods.product_code!="")
+            <if test="do.id!=null">
+                and goods.id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and goods.created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and goods.updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and goods.created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and goods.updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and goods.tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and goods.delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and goods.status = #{do.status}
+            </if>
+            <if test="do.customerId!=null">
+                and goods.customer_id = #{do.customerId}
+            </if>
+            <if test="do.customerName!=null">
+                and customer.name like CONCAT(#{do.customerName},'%')
+            </if>
+            <if test="do.productCode!=null">
+                and goods.product_code = #{do.productCode}
+            </if>
+            <if test="do.sku!=null">
+                and goods.sku = #{do.sku}
+            </if>
+            <if test="do.name!=null">
+                and goods.name = #{do.name}
+            </if>
+            <if test="do.code!=null">
+                and goods.code = #{do.code}
+            </if>
+            <if test="do.spec!=null">
+                and goods.spec = #{do.spec}
+            </if>
+            <if test="do.unitName!=null">
+                and goods.unit_name = #{do.unitName}
+            </if>
+            <if test="do.platformCode!=null">
+                and goods.platform_code = #{do.platformCode}
+            </if>
+            <if test="do.distributionModeId!=null">
+                and goods.distribution_mode_id = #{do.distributionModeId}
+            </if>
+            <if test="params.matchStartTime!=null">
+                and goods.updated_at &gt; #{params.matchStartTime}
+            </if>
+            <if test="params.matchEndTime!=null">
+                and goods.updated_at &lt; #{params.matchEndTime}
+            </if>
+            and goods.delete_flag = 0
+        </where>
+        order by goods.${sort}
+    </select>
+</mapper>

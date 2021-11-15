@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.product.ProductMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.product.dataobject.ProductDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="product_category_id" property="productCategoryId"/>
+        <result column="product_category_name" property="productCategoryName"/>
+        <result column="product_brand_id" property="productBrandId"/>
+        <result column="product_brand_name" property="productBrandName"/>
+        <result column="product_family_id" property="productFamilyId"/>
+        <result column="product_family_name" property="productFamilyName"/>
+        <result column="product_spec_id" property="productSpecId"/>
+        <result column="product_spec_name" property="productSpecName"/>
+        <result column="unit_name" property="unitName"/>
+        <result column="weight" property="weight"/>
+        <result column="length" property="length"/>
+        <result column="height" property="height"/>
+        <result column="width" property="width"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        product.id, product.created_by, product.updated_by, product.created_at, product.updated_at,product.tenant_id, product.delete_flag, product.status, product.name, product.code, product.product_category_id, product.product_category_name, product.product_brand_id, product.product_brand_name, product.product_family_id, product.product_family_name, product.product_spec_id, product.product_spec_name, product.unit_name, product.weight, product.length, product.height, product.width
+    </sql>
+    <update id="updateBrandNameByBrandId">
+        update product
+        set product_brand_name = #{brandName}
+        where product_brand_id = #{brandId}
+    </update>
+    <update id="updateCategoryByCategoryId">
+        update product
+        set product_category_name = #{categoryName}
+        where product_category_id = #{categoryId}
+    </update>
+    <update id="updateFamilyNameByFamilyId">
+        update product
+        set product_family_name = #{familyName}
+        where product_family_id = #{familyId}
+    </update>
+    <update id="updateSpecNameBySpecId">
+        update product
+        set product_spec_name = #{specName}
+        where product_spec_id = #{specId}
+    </update>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        <if test="do.bindMakeUpFlag==1 or do.bindMakeUpFlag==2">
+            left join makeup_setting_product on product.id = makeup_setting_product.product_id
+        </if>
+        <where>
+            <if test="do.bindMakeUpFlag==1">
+                and makeup_setting_product.id is not null
+            </if>
+            <if test="do.bindMakeUpFlag==2">
+                and makeup_setting_product.id is null
+            </if>
+            <if test="do.id!=null">
+                and product.id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and product.created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and product.updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and product.created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and product.updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and product.tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and product.delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and product.status = #{do.status}
+            </if>
+            <if test="do.name!=null">
+                and product.`name` like CONCAT(#{do.name},'%')
+            </if>
+            <if test="do.code!=null">
+                and product.code = #{do.code}
+            </if>
+            <if test="do.productCategoryId!=null">
+                and product.product_category_id = #{do.productCategoryId}
+            </if>
+            <if test="do.productCategoryName!=null">
+                and product.product_category_name = #{do.productCategoryName}
+            </if>
+            <if test="do.productBrandId!=null">
+                and product.product_brand_id = #{do.productBrandId}
+            </if>
+            <if test="do.productBrandName!=null">
+                and product.product_brand_name = #{do.productBrandName}
+            </if>
+            <if test="do.productFamilyId!=null">
+                and product.product_family_id = #{do.productFamilyId}
+            </if>
+            <if test="do.productFamilyName!=null">
+                and product.product_family_name = #{do.productFamilyName}
+            </if>
+            <if test="do.productSpecId!=null">
+                and product.product_spec_id = #{do.productSpecId}
+            </if>
+            <if test="do.productSpecName!=null">
+                and product.product_spec_name = #{do.productSpecName}
+            </if>
+            <if test="do.unitName!=null">
+                and product.unit_name = #{do.unitName}
+            </if>
+            <if test="do.weight!=null">
+                and product.weight = #{do.weight}
+            </if>
+            <if test="do.length!=null">
+                and product.length = #{do.length}
+            </if>
+            <if test="do.height!=null">
+                and product.height = #{do.height}
+            </if>
+            <if test="do.width!=null">
+                and product.width = #{do.width}
+            </if>
+            and product.delete_flag = 0
+        </where>
+        order by product.${sort}
+    </select>
+    <select id="getByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        where code = #{productCode}
+    </select>
+</mapper>

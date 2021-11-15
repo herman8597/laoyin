@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.order.OrderDeliverMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.order.dataobject.OrderDeliverDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="order_id" property="orderId"/>
+        <result column="consignee" property="consignee"/>
+        <result column="mobile" property="mobile"/>
+        <result column="country_id" property="countryId"/>
+        <result column="country_name" property="countryName"/>
+        <result column="province_id" property="provinceId"/>
+        <result column="province_name" property="provinceName"/>
+        <result column="city_id" property="cityId"/>
+        <result column="city_name" property="cityName"/>
+        <result column="area_id" property="areaId"/>
+        <result column="area_name" property="areaName"/>
+        <result column="detailed_address" property="detailedAddress"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, created_by, updated_by, created_at, updated_at,tenant_id, delete_flag, status, order_id, consignee, mobile, country_id, country_name, province_id, province_name, city_id, city_name, area_id, area_name, detailed_address
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_deliver
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and status = #{do.status}
+            </if>
+            <if test="do.orderId!=null">
+                and order_id = #{do.orderId}
+            </if>
+            <if test="do.consignee!=null">
+                and consignee = #{do.consignee}
+            </if>
+            <if test="do.mobile!=null">
+                and mobile = #{do.mobile}
+            </if>
+            <if test="do.countryId!=null">
+                and country_id = #{do.countryId}
+            </if>
+            <if test="do.countryName!=null">
+                and country_name = #{do.countryName}
+            </if>
+            <if test="do.provinceId!=null">
+                and province_id = #{do.provinceId}
+            </if>
+            <if test="do.provinceName!=null">
+                and province_name = #{do.provinceName}
+            </if>
+            <if test="do.cityId!=null">
+                and city_id = #{do.cityId}
+            </if>
+            <if test="do.cityName!=null">
+                and city_name = #{do.cityName}
+            </if>
+            <if test="do.areaId!=null">
+                and area_id = #{do.areaId}
+            </if>
+            <if test="do.areaName!=null">
+                and area_name = #{do.areaName}
+            </if>
+            <if test="do.detailedAddress!=null">
+                and detailed_address = #{do.detailedAddress}
+            </if>
+            and delete_flag = 0
+        </where>
+        order by ${sort}
+    </select>
+    <select id="getByOrderId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_deliver
+        where order_id = #{orderId}
+    </select>
+</mapper>

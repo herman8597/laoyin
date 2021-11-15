@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-ch" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>配货码标签</title>
+    <style>
+        .table-container {
+            /* border: 1px solid #000; */
+            width: 262px;
+            height: 186.5px;
+            font-size: 12px;
+            transform: scale(0.9);
+        }
+
+        .table-container > .table {
+            width: 262px;
+            height: 186.5px;
+            border-collapse: collapse;
+        }
+
+        table,
+        table tr th,
+        table tr td {
+            border: 1px solid #000;
+            text-align: left;
+        }
+
+        tr {
+        }
+
+        th {
+            padding: 0;
+            padding-left: 5px;
+        }
+
+        .th-width-limit {
+            /* width: 164px; */
+            /* overflow: hidden; */
+            /* white-space: nowrap; */
+            /* text-overflow: ellipsis; */
+        }
+
+        .row-tr1 {
+            height: 25px;
+        }
+
+        .row-tr1 div {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .row-tr1 .div12 {
+            /* position: absolute;
+            top: 0px;
+            left: 206px; */
+        }
+
+        .row-tr3 .img-box {
+            text-align: center;
+        }
+
+        .row-tr3 .img-box .img {
+            height: 100px;
+        }
+
+        .row-tr8 img {
+            height: 20px;
+        }
+
+        .row-tr8 .div81 {
+            padding-top: 3px;
+            vertical-align: middle;
+        }
+
+        .row-tr8 div {
+            display: inline-block;
+        }
+    </style>
+</head>
+<!-- 毫米＝(像素/DPI)* 25.4
+像素=(毫米数/25.4)*DPI -->
+
+<body>
+<div class="table-container">
+    <table cellpadding="10" cellspacing="0" class="table">
+        <tbody class="tbody">
+        <tr class="row-tr1">
+            <th colspan="2" th:unless="${distributionCodeIndex}">
+                <div class="th-width-limit" style="width:200px ;" th:text="'配货号:'+${distributionCode}">
+                    配货号:H20210927202441401-28
+                </div>
+                <div class="div12" th:text="${materialIndex}+'/'+${materialSum}">1/20</div>
+            </th>
+            <th colspan="2" th:if="${distributionCodeIndex}">
+                <div class="th-width-limit" style="width:200px ;"
+                     th:text="'配货号:'+${distributionCode}+'-'+${distributionCodeIndex}">
+                    配货号:H20210927202441401-28
+                </div>
+                <div class="div12" th:text="${materialIndex}+'/'+${materialSum}">1/20</div>
+            </th>
+        </tr>
+        <tr class="row-tr2">
+            <th colspan="2">
+                <div class="th-width-limit" style="width: 100%;" th:text="'商品名称:'+${goodsName}">商品名称:定制玻璃手机壳
+                </div>
+            </th>
+        </tr>
+        <tr class="row-tr3">
+            <th>
+                <div class="th-width-limit" th:text="'客户:'+${customerName}">客户:bat</div>
+            </th>
+            <th class="img-box" rowspan="6">
+                <img alt="" class="img"
+                     srcset="" th:src="${effectFilePath}"/>
+            </th>
+        </tr>
+        <tr class="row-tr4">
+            <th>
+                <div class="th-width-limit" th:text="'订单号:'+${orderNo}">订单号:O20210927202440160</div>
+            </th>
+        </tr>
+        <tr class="row-tr5">
+            <th>
+                <div class="th-width-limit" th:text="'三方单号:'+${thirdPartyNo}">三方单号:O1632648713828</div>
+            </th>
+        </tr>
+        <tr class="row-tr6">
+            <th>
+                <div class="th-width-limit" th:text="'规格:'+${thirdPartySpecName}">规格:iPhone 13</div>
+            </th>
+        </tr>
+        <tr class="row-tr7">
+            <th>
+                <div class="th-width-limit" th:text="'数量:'+${itemCount}">数量:2</div>
+            </th>
+        </tr>
+        <tr class="row-tr8">
+            <th>
+                <div class="div81">
+                    <img alt=""
+                         srcset=""
+                         th:src="@{${barImgPath}}"/>
+                </div>
+                <div class="subtitle">扫码打印运单</div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>

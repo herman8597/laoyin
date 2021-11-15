@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.makeup.MakeupTaskMaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.makeup.dataobject.MakeupTaskMaterialDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="makeup_task_id" property="makeupTaskId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="order_detail_id" property="orderDetailId"/>
+        <result column="distribution_code" property="distributionCode"/>
+        <result column="distribution_code_index" property="distributionCodeIndex"/>
+        <result column="material_index" property="materialIndex"/>
+        <result column="material_sum" property="materialSum"/>
+        <result column="material_sort" property="materialSort"/>
+        <result column="scan_flag" property="scanFlag"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, created_by, updated_by, created_at, updated_at,tenant_id, delete_flag, status, makeup_task_id, order_id, order_no, order_detail_id, distribution_code, distribution_code_index, material_index, material_sum, material_sort, scan_flag
+    </sql>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from makeup_task_material
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and status = #{do.status}
+            </if>
+            <if test="do.makeupTaskId!=null">
+                and makeup_task_id = #{do.makeupTaskId}
+            </if>
+            <if test="do.orderId!=null">
+                and order_id = #{do.orderId}
+            </if>
+            <if test="do.orderNo!=null">
+                and order_no = #{do.orderNo}
+            </if>
+            <if test="do.orderDetailId!=null">
+                and order_detail_id = #{do.orderDetailId}
+            </if>
+            <if test="do.distributionCode!=null">
+                and distribution_code = #{do.distributionCode}
+            </if>
+            and delete_flag = 0
+        </where>
+        order by ${sort}
+    </select>
+    <select id="listByMakeupTaskId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from makeup_task_material
+        where makeup_task_id = #{makeupTaskId}
+        and delete_flag = 0
+    </select>
+    <select id="getMaterialRequisition" resultType="com.bat.laoyin.dao.makeup.dataobject.MyPickListItemDO">
+        SELECT @rownum := @rownum + 1    rowNum,
+               product.`code`,
+               product.`name`,
+               product.product_spec_name productSpecName,
+               product.unit_name         unitName,
+               product.height,
+               a.count_num               countNum
+        FROM (SELECT order_detail.product_code, count(*) count_num, @rownum := 0
+              FROM makeup_task_material,
+                   order_detail
+              WHERE makeup_task_material.order_detail_id = order_detail.id
+                AND makeup_task_material.makeup_task_id = #{makeupTaskId}
+                and makeup_task_material.delete_flag = 0
+              GROUP BY order_detail.product_code) a,
+             product
+        WHERE a.product_code = product.`code`
+        ORDER BY product.product_spec_name
+    </select>
+    <select id="listByMakeupTaskIdGroupByOrderDetailId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `makeup_task_material` where makeup_task_id = #{makeupTaskId}
+        and delete_flag = 0
+        GROUP BY order_detail_id
+    </select>
+    <select id="getLastIndexByOrderId" resultType="java.lang.Integer">
+        SELECT material_index
+        FROM makeup_task_material
+        WHERE order_id = #{orderId,jdbcType=INTEGER}
+          and delete_flag = 0
+        ORDER BY material_index DESC
+        LIMIT 1
+    </select>
+    <select id="listOrderIdByMakeupTaskIdGroupByOrderId" resultType="java.lang.Integer">
+        SELECT order_id
+        FROM `makeup_task_material`
+        where makeup_task_id = #{makeupTaskId}
+          and delete_flag = 0
+        GROUP BY order_id
+    </select>
+    <select id="listOrderDetailIdByMakeupTaskIdGroupByOrderDetailId" resultType="java.lang.Integer">
+        SELECT order_detail_id
+        FROM `makeup_task_material`
+        where makeup_task_id = #{makeupTaskId}
+          and delete_flag = 0
+        GROUP BY order_detail_id
+    </select>
+    <select id="listByOrderDetailIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `makeup_task_material`
+        <where>
+            order_detail_id in
+            <foreach collection="orderDetailIds" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+            and delete_flag = 0
+        </where>
+    </select>
+    <select id="listByOrderDetailIdGroupByDistributionCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `makeup_task_material`
+        where order_detail_id = #{orderDetailId} and delete_flag = 0 group by distribution_code
+    </select>
+    <select id="listByOrderId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `makeup_task_material`
+        where order_id = #{orderId}
+        and delete_flag = 0
+    </select>
+    <select id="listByDistributionCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `makeup_task_material`
+        where distribution_code = #{distributionCode}
+        and delete_flag = 0
+    </select>
+    <select id="getByDistributionCodeAndDistributionCodeIndex" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `makeup_task_material`
+        where distribution_code = #{distributionCode}
+        and distribution_code_index = #{distributionCodeIndex}
+        and delete_flag = 0
+    </select>
+</mapper>

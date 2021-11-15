@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>领料单</title>
+    <style>
+        .img-box {
+            display: inline-block;
+        }
+
+        .title {
+            vertical-align: top;
+            display: inline-block;
+        }
+
+        .sub-title {
+            font-size: 12px;
+        }
+
+        .table-box {
+            display: flex;
+        }
+
+        .table {
+            clear: both;
+            text-align: center;
+            flex: 1;
+            border-collapse: collapse
+        }
+
+        table, tr, td, th {
+            border: 2px solid #999;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        #qrimg {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="title-box">
+    <div class="img-box">
+        <img alt="" id="qrimg" th:src="@{${qrImgPath}}">
+        <div class="sub-title">扫码打印配货标签</div>
+    </div>
+    <h1 class="title" th:text="'拼版任务编号：'+${makeupTaskCode}">拼版任务编号：</h1>
+</div>
+<div class="table-box">
+    <table cellpadding="10" cellspacing="0" class="table">
+        <tr>
+            <th>序号</th>
+            <th>产品编码</th>
+            <th>产品名称</th>
+            <th>产品规格</th>
+            <th>单位</th>
+            <th>产品高度(mm)</th>
+            <th>领料数量</th>
+        </tr>
+        <tr th:each="item : ${materialRequisitionItems}">
+            <td th:text="${item.rowNum}">1</td>
+            <td th:text="${item.code}">C193883</td>
+            <td th:text="${item.name}">tpu壳</td>
+            <td th:text="${item.productSpecName}">huawei mate30</td>
+            <td th:text="${item.unitName}">个</td>
+            <td th:text="${item.height}">50</td>
+            <td th:text="${item.countNum}">3</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

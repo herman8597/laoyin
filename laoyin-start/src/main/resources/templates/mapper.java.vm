@@ -1,0 +1,23 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+import ${superMapperClassPackage};
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+/**
+ * <p>
+ * Mapper接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+
+    IPage<${entity}> selectPageVo(IPage<${entity}> userPage,@Param("do") ${entity} aDO,@Param("sort") String sort);
+
+    List<${entity}> selectPageVo(@Param("do") ${entity} employeeDO,@Param("sort") String sort);
+
+}

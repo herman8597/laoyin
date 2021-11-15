@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bat.laoyin.dao.makeup.MakeupTaskProductMapper">
+
+    <resultMap id="BaseResultMap" type="com.bat.laoyin.dao.makeup.dataobject.MakeupTaskProductDO">
+        <id column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="status" property="status"/>
+        <result column="makeup_task_id" property="makeupTaskId"/>
+        <result column="product_id" property="productId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        makeup_task_product.id, makeup_task_product.created_by, makeup_task_product.updated_by, makeup_task_product.created_at, makeup_task_product.updated_at,makeup_task_product.tenant_id, makeup_task_product.delete_flag, makeup_task_product.status, makeup_task_product.makeup_task_id, makeup_task_product.product_id
+    </sql>
+    <insert id="insertBatch">
+        INSERT INTO makeup_task_product (makeup_task_product.created_by, makeup_task_product.updated_by,
+        makeup_task_product.created_at, makeup_task_product.updated_at,makeup_task_product.tenant_id,
+        makeup_task_product.delete_flag, makeup_task_product.status, makeup_task_product.makeup_task_id,
+        makeup_task_product.product_id)
+        values
+        <foreach collection="dos" index="index" item="item" separator=",">
+            (#{item.created_by},
+            #{item.updated_by},
+            #{item.created_at},
+            #{item.updated_at},
+            #{item.tenant_id},
+            #{item.delete_flag},
+            #{item.status},
+            #{item.makeup_task_id},
+            #{item.product_id})
+        </foreach>
+    </insert>
+
+    <!-- 通用 分页查询 -->
+    <select id="selectPageVo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from makeup_task_product
+        <where>
+            <if test="do.id!=null">
+                and id = #{do.id}
+            </if>
+            <if test="do.createdBy!=null">
+                and created_by = #{do.createdBy}
+            </if>
+            <if test="do.updatedBy!=null">
+                and updated_by = #{do.updatedBy}
+            </if>
+            <if test="do.createdAt!=null">
+                and created_at = #{do.createdAt}
+            </if>
+            <if test="do.updatedAt!=null">
+                and updated_at = #{do.updatedAt}
+            </if>
+            <if test="do.tenantId!=null">
+                and tenant_id = #{do.tenantId}
+            </if>
+            <if test="do.deleteFlag!=null">
+                and delete_flag = #{do.deleteFlag}
+            </if>
+            <if test="do.status!=null">
+                and status = #{do.status}
+            </if>
+            <if test="do.makeupTaskId!=null">
+                and makeup_task_id = #{do.makeupTaskId}
+            </if>
+            <if test="do.productId!=null">
+                and product_id = #{do.productId}
+            </if>
+            and delete_flag = 0
+        </where>
+        order by ${sort}
+    </select>
+    <select id="getByStatusAndProductId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from makeup_task_product,makeup_task
+        where makeup_task.status = #{status}
+        and makeup_task_product.product_id = #{productId}
+        order by makeup_task_product.updated_at desc limit 1
+    </select>
+</mapper>

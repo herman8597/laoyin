@@ -1,0 +1,24 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import com.baomidou.mybatisplus.extension.rq.service.IServiceCmd;
+import com.baomidou.mybatisplus.extension.rq.service.IServiceQry;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${package.Qry}.${entityQry};
+
+import java.util.List;
+/**
+ * <p>
+ * 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} extends IServiceCmd<${entity}>,IServiceQry<${entity}> {
+
+    IPage<${entity}> selectPageVo(IPage<${entity}> page, ${entityQry} qry);
+
+    List<${entity}> selectVo(${entityQry} qry);
+	
+}

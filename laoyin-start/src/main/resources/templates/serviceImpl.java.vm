@@ -1,0 +1,48 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+##import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.rq.service.impl.ServiceImpl;
+import ${package.QryExe}.${entityQryExe};
+import ${package.CmdExe}.${entityCmdExe};
+import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${package.Qry}.${entityQry};
+
+import java.util.List;
+/**
+ * <p>
+ * ${table.comment}  服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} extends ServiceImpl<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+
+    @Resource
+    private ${entityCmdExe} cmdExe;
+
+    @Resource
+    private ${entityQryExe} qryExe;
+
+    public ${table.serviceImplName}(@Autowired ${entityCmdExe} serviceCmd, @Autowired ${entityQryExe} serviceQry) {
+        super(serviceCmd, serviceQry);
+    }
+
+    @Override
+    public IPage<${entity}> selectPageVo(IPage<${entity}> page, ${entityQry} qry) {
+        return qryExe.selectPageVo(page,qry);
+    }
+
+    @Override
+    public List<${entity}> selectVo(${entityQry} qry) {
+        return qryExe.selectVo(qry);
+    }
+	
+}
